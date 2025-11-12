@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МастерПол - Партнеры</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.26/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="header-footer-bg" style="padding: 20px 0;">
+        <div class="uk-container">
+            <div class="uk-flex uk-flex-middle">
+                <img src="{% static 'logo.png' %}" alt="logo" width="100" height="100" style="margin-right: 15px;">
+                <h1 class="uk-h2 uk-margin-remove header-footer-text uk-text-bold">МастерПол</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="uk-section" style="background-color: #FFFFFF; min-height: 80vh;">
+        <div class="uk-container">
+            <h2 class="uk-h1 uk-margin-medium-bottom accent-text">Наши партнеры</h2>
+
+            <!-- Список партнеров -->
+            <div class="uk-grid-medium uk-child-width-1-1" uk-grid>
+                {% for partner in partners %}
+                <div>
+                    <div class="uk-card uk-card-default uk-card-body card-bg" style="border-radius: 8px;">
+                        <div class="uk-flex uk-flex-between uk-flex-middle">
+                            <div class="uk-flex-1">
+                                <h3 class="uk-h4 uk-margin-remove accent-text">
+                                    <a class="uk-link-heading">
+                                        {{ partner.type.name }} | {{ partner.name }}
+                                    </a>
+                                </h3>
+                                <p class="uk-margin-remove-top card-text">
+                                    Директор: {{ partner.CEO }}
+                                </p>
+                                <p class="card-text" >
+                                    +7 {{ partner.phone }}
+                                </p>
+                                <div class="uk-margin-small-top">
+                                    <span class="uk-label rating-label">
+                                        Рейтинг: {{ partner.rating }}/10
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="uk-text-right uk-margin-left">
+                                <div class="discount-text">
+                                        {{ partner.discount }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="uk-width-1-1">
+                    <div class="uk-card uk-card-default uk-card-body uk-text-center">
+                        <p class="uk-text-large accent-text">Партнеры не найдены</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer class="header-footer-bg" style="padding: 30px 0; margin-top: 50px;">
+        <div class="uk-container">
+            <div class="uk-text-center">
+                <p class="header-footer-text uk-text-bold" style="margin: 0;">© 2024 МастерПол. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.26/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.26/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>

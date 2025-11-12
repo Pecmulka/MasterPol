@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card-text {
+    color: #000000;
+    font-size: 1.2em;
+}
+
+.header-footer-text {
+    color: #67BA80;
+}
+
+.header-footer-bg {
+    background-color: #F4E8D3;
+}
+
+.card-bg {
+    background-color: #F4E8D3;
+}
+
+.accent-text {
+    color: #67BA80;
+}
+
+.rating-label {
+    background-color: #67BA80;
+    color: white;
+}
+
+.discount-text {
+    color: #67BA80;
+    font-size: 2em;
+}

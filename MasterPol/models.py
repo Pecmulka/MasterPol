@@ -18,12 +18,12 @@ class Address (models.Model):
 
 class Product_type(models.Model):
     name = models.CharField(max_length=100)
-    product_type_ratio = models.FloatField
+    product_type_ratio = models.FloatField()
 
 class Product (models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(Product_type, on_delete=models.CASCADE)
-    partner_min_price = models.FloatField
+    partner_min_price = models.FloatField()
 
 class Partner_type(models.Model):
     name = models.CharField(max_length=100)
@@ -44,3 +44,7 @@ class Partner_product(models.Model):
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
     product_quantity = models.IntegerField()
     date = models.DateField()
+
+    def total_amount(self):
+        """Метод для подсчета общей суммы покупки"""
+        return self.product_quantity * self.product.partner_min_price

@@ -32,7 +32,7 @@
                         <div class="uk-flex uk-flex-between uk-flex-middle">
                             <div class="uk-flex-1">
                                 <h3 class="uk-h4 uk-margin-remove accent-text">
-                                    <a class="uk-link-heading">
+                                    <a href="{% url 'partner_purchases' partner.id %}" class="uk-link-heading">
                                         {{ partner.type.name }} | {{ partner.name }}
                                     </a>
                                 </h3>
@@ -47,6 +47,10 @@
                                         Рейтинг: {{ partner.rating }}/10
                                     </span>
                                 </div>
+                                <a href="{% url 'partner_edit' partner.id %}" class="uk-button uk-button-default uk-button-small uk-margin-top"
+                                   style="background-color: #67BA80; color: white; min-width: 120px;">
+                                    Редактировать
+                                </a>
                             </div>
                             <div class="uk-text-right uk-margin-left">
                                 <div class="discount-text">

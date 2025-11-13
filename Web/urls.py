@@ -21,4 +21,6 @@ from MasterPol import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.partners_list, name='partners_list'),
+    path('edit/<int:partner_id>/', views.partner_edit, name='partner_edit'),
+    path('history/<int:partner_id>/', views.partner_purchases, name='partner_purchases')
 ]

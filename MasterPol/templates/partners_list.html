@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МастерПол - Партнеры</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.26/dist/css/uikit.min.css" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <header class="header-footer-bg" style="padding: 20px 0;">
@@ -21,6 +21,7 @@
     <main class="uk-section" style="background-color: #FFFFFF; min-height: 80vh;">
         <div class="uk-container">
             <h2 class="uk-h1 uk-margin-medium-bottom accent-text">Наши партнеры</h2>
+            <a href="{% url 'partner_add' %}" class="uk-button uk-button-primary uk-margin-bottom" style="background-color: #67BA80;">Добавить партнера</a>
 
             <div class="uk-grid-medium uk-child-width-1-1" uk-grid>
                 {% for partner in partners %}
@@ -44,8 +45,7 @@
                                         Рейтинг: {{ partner.rating }}/10
                                     </span>
                                 </div>
-                                <a href="{% url 'partner_edit' partner.id %}" class="uk-button uk-button-default uk-button-small uk-margin-top"
-                                   style="background-color: #67BA80; color: white; min-width: 120px;">
+                                <a href="{% url 'partner_edit' partner.id %}" class="uk-button uk-button-default uk-button-small uk-margin-top redact_button">
                                     Редактировать
                                 </a>
                             </div>

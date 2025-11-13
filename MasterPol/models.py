@@ -47,4 +47,4 @@ class Partner_product(models.Model):
 
     def total_amount(self):
         """Метод для подсчета общей суммы покупки"""
-        return self.product_quantity * self.product.partner_min_price
+        return self.product_quantity * self.product.partner_min_price * (1 - (self.partner.discount / 100))

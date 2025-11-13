@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <!-- Шапка -->
     <header class="header-footer-bg" style="padding: 20px 0;">
         <div class="uk-container">
             <div class="uk-flex uk-flex-middle">
@@ -19,12 +18,10 @@
         </div>
     </header>
 
-    <!-- Основной контент -->
     <main class="uk-section" style="background-color: #FFFFFF; min-height: 80vh;">
         <div class="uk-container">
             <h2 class="uk-h1 uk-margin-medium-bottom accent-text">Наши партнеры</h2>
 
-            <!-- Список партнеров -->
             <div class="uk-grid-medium uk-child-width-1-1" uk-grid>
                 {% for partner in partners %}
                 <div>

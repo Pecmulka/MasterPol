@@ -34,3 +34,13 @@ body {
     color: #67BA80;
     font-size: 2em;
 }
+
+.total-text {
+    color: #67BA80;
+}
+
+.redact_button {
+    background-color: #67BA80;
+    color: white;
+    min-width: 120px;
+}

@@ -1,27 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>История покупок - МастерПол</title>
-    <!-- UIkit CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.26/dist/css/uikit.min.css" />
-    <!-- Подключение CSS файла -->
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <!-- Шапка -->
     <header class="header-footer-bg" style="padding: 20px 0;">
         <div class="uk-container">
             <div class="uk-flex uk-flex-middle">
-                <img src="{{ MEDIA_URL }}logo.png" alt="МастерПол" width="50" height="50" style="margin-right: 15px;">
+                <img src="{% static 'logo.png' %}" alt="МастерПол" width="100" height="100" style="margin-right: 15px;">
                 <h1 class="uk-h2 uk-margin-remove header-footer-text">МастерПол</h1>
             </div>
         </div>
     </header>
 
-    <!-- Основной контент -->
     <main class="uk-section" style="background-color: #FFFFFF; min-height: 80vh;">
         <div class="uk-container">
             <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-medium-bottom">
@@ -52,11 +48,9 @@
                                 <p class="uk-text-meta accent-text">
                                     <strong>Дата покупки:</strong> {{ purchase.date|date:"d.m.Y" }}
                                 </p>
-                            </div>
-                            <div class="uk-text-right">
-                                <div class="uk-badge purchase-amount" style="background-color: #67BA80; color: white; font-size: 1.2em; padding: 15px 20px;">
-                                    {{ purchase.total_amount }} руб.
-                                </div>
+                                <p class="uk-text-meta total-text">
+                                     <strong>Сумма:</strong>{{ purchase.total_amount }} руб.
+                                </p>
                             </div>
                         </div>
                     </div>

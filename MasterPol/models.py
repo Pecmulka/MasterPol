@@ -20,6 +20,9 @@ class Product_type(models.Model):
     name = models.CharField(max_length=100)
     product_type_ratio = models.FloatField()
 
+    def __str__(self):
+        return f"{self.name} (Коэффицент: {self.product_type_ratio})"
+
 class Product (models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(Product_type, on_delete=models.CASCADE)
@@ -37,7 +40,20 @@ class Partner(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     INN = models.CharField(max_length=100)
     rating = models.IntegerField()
-    discount = models.IntegerField(default=0)
+
+    def get_discount(self):
+        total_quantity = Partner_product.objects.filter(
+            partner=self
+        ).aggregate(total=models.Sum('product_quantity'))['total'] or 0
+
+        if total_quantity >= 300000:
+            return 15
+        elif total_quantity >= 50000:
+            return 10
+        elif total_quantity >= 10000:
+            return 5
+        else:
+            return 0
 
 class Partner_product(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -45,6 +61,11 @@ class Partner_product(models.Model):
     product_quantity = models.IntegerField()
     date = models.DateField()
 
-    def total_amount(self):
-        """Метод для подсчета общей суммы покупки"""
-        return self.product_quantity * self.product.partner_min_price * (1 - (self.partner.discount / 100))
+class Material_type(models.Model):
+    type = models.CharField(max_length=100)
+    material_scrap_percentage = models.FloatField()
+
+    def __str__(self):
+        return f"{self.type} (брак: {self.material_scrap_percentage}%)"
+
+

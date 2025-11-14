@@ -9,21 +9,91 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header class="header-footer-bg" style="padding: 20px 0;">
+     <header class="header-footer-bg" style="padding: 20px 0;">
         <div class="uk-container">
             <div class="uk-flex uk-flex-middle">
-                <img src="{% static 'logo.png' %}" alt="logo" width="100" height="100" style="margin-right: 15px;">
+                <img src="{% static 'logo.png' %}" alt="МастерПол" width="100" height="100" style="margin-right: 15px;">
                 <h1 class="uk-h2 uk-margin-remove header-footer-text uk-text-bold">МастерПол</h1>
             </div>
         </div>
     </header>
 
+    <!-- Основной контент -->
     <main class="uk-section" style="background-color: #FFFFFF; min-height: 80vh;">
         <div class="uk-container">
-            <h2 class="uk-h1 uk-margin-medium-bottom accent-text">Наши партнеры</h2>
-            <a href="{% url 'partner_add' %}" class="uk-button uk-button-primary uk-margin-bottom" style="background-color: #67BA80;">Добавить партнера</a>
+            <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-medium-bottom">
+                <h2 class="uk-h2 accent-text">Наши партнеры</h2>
+                <a href="{% url 'partner_add' %}" class="uk-button uk-button-primary" style="background-color: #67BA80;">Добавить партнера</a>
+            </div>
 
-            <div class="uk-grid-medium uk-child-width-1-1" uk-grid>
+            <!-- Секция калькулятора -->
+            <div class="calculator-section">
+                <div class="uk-card uk-card-default uk-card-body" style="background-color: #F4E8D3; border-radius: 8px;">
+                    <h3 class="uk-h3 accent-text uk-margin-remove-bottom">Калькулятор материалов</h3>
+                    <p class="accent-text">Рассчитайте необходимое количество материала для производства</p>
+
+                    <form method="post" class="uk-form-stacked uk-margin-top">
+                        {% csrf_token %}
+                        <input type="hidden" name="calculate" value="1">
+
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-5@m">
+                                <label class="uk-form-label accent-text">Тип продукции</label>
+                                <div class="uk-form-controls">
+                                    {{ calculator_form.product_type }}
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-5@m">
+                                <label class="uk-form-label accent-text">Тип материала</label>
+                                <div class="uk-form-controls">
+                                    {{ calculator_form.material_type }}
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-5@m">
+                                <label class="uk-form-label accent-text">Количество</label>
+                                <div class="uk-form-controls">
+                                    {{ calculator_form.product_quantity }}
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-5@m">
+                                <label class="uk-form-label accent-text">Параметр 1</label>
+                                <div class="uk-form-controls">
+                                    {{ calculator_form.param1 }}
+                                </div>
+                            </div>
+
+                            <div class="uk-width-1-5@m">
+                                <label class="uk-form-label accent-text">Параметр 2</label>
+                                <div class="uk-form-controls">
+                                    {{ calculator_form.param2 }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="uk-margin-top uk-flex uk-flex-between uk-flex-middle">
+                            <div>
+                                {% if result is not None %}
+                                    {% if result == -1 %}
+                                        <span class="uk-label uk-label-danger">Ошибка: Проверьте данные</span>
+                                    {% else %}
+                                        <span class="uk-label uk-label-success" style="background-color: #67BA80;">
+                                            Необходимо материала: <strong>{{ result }} единиц</strong>
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="uk-button uk-button-primary uk-button-small" style="background-color: #67BA80;">
+                                Рассчитать
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="uk-grid-medium uk-child-width-1-1 uk-margin-top" uk-grid>
                 {% for partner in partners %}
                 <div>
                     <div class="uk-card uk-card-default uk-card-body card-bg" style="border-radius: 8px;">
@@ -51,7 +121,7 @@
                             </div>
                             <div class="uk-text-right uk-margin-left">
                                 <div class="discount-text">
-                                        {{ partner.discount }}%
+                                        {{ partner.get_discount }}%
                                 </div>
                             </div>
                         </div>

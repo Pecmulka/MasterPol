@@ -1,5 +1,7 @@
+import math
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Partner, Partner_type, Region, City, Street, Partner_product, Address
+from .forms import MaterialCalculatorForm
+from .models import Partner, Partner_type, Region, City, Street, Partner_product, Address, Product_type, Material_type
 
 
 def partner_edit(request, partner_id):
@@ -11,7 +13,6 @@ def partner_edit(request, partner_id):
             partner.name = request.POST.get('name')
             partner.phone = request.POST.get('phone')
             partner.email = request.POST.get('email')
-            partner.discount = request.POST.get('discount')
             partner.CEO = request.POST.get('ceo')
             partner.INN = request.POST.get('inn')
             partner.rating = request.POST.get('rating')
@@ -93,7 +94,6 @@ def partner_add(request):
             name = request.POST.get('name')
             phone = request.POST.get('phone')
             email = request.POST.get('email')
-            discount = request.POST.get('discount')
             ceo = request.POST.get('ceo')
             inn = request.POST.get('inn')
             rating = request.POST.get('rating')
@@ -150,7 +150,6 @@ def partner_add(request):
                 address=address,
                 INN=inn,
                 rating=rating,
-                discount=discount
             )
 
             return redirect('partners_list')
@@ -160,9 +159,64 @@ def partner_add(request):
 
     return render(request, 'partner_add.html')
 
+
+def calculate_required_material(product_type_id, material_type_id, product_quantity, param1, param2):
+    """
+    Расчет количества материала для производства продукции
+    """
+    try:
+        # Проверяем существование типов продукции и материалов
+        product_type = Product_type.objects.get(id=product_type_id)
+        material_type = Material_type.objects.get(id=material_type_id)
+
+        # Проверяем валидность входных параметров
+        if (product_quantity <= 0 or param1 <= 0 or param2 <= 0 or
+                product_type.product_type_ratio <= 0 or material_type.material_scrap_percentage < 0):
+            return -1
+
+        # Расчет материала на одну единицу продукции
+        material_per_unit = param1 * param2 * product_type.product_type_ratio
+
+        # Общее количество материала без учета брака
+        total_material = material_per_unit * product_quantity
+
+        # Учет брака материала (переводим процент в долю)
+        defect_rate = material_type.material_scrap_percentage / 100.0
+
+        # Количество материала с учетом брака
+        material_with_defect = total_material / (1 - defect_rate)
+
+        # Округляем до целого в большую сторону
+        return int(math.ceil(material_with_defect))
+
+    except (Product_type.DoesNotExist, Material_type.DoesNotExist, ValueError):
+        return -1
+
 def partners_list(request):
     partners = Partner.objects.select_related('type').all()
-    return render(request, 'partners_list.html', {'partners': partners})
+    calculator_form = MaterialCalculatorForm()
+    result = None
+
+    if request.method == 'POST' and 'calculate' in request.POST:
+        calculator_form = MaterialCalculatorForm(request.POST)
+        if calculator_form.is_valid():
+            product_type = calculator_form.cleaned_data['product_type']
+            material_type = calculator_form.cleaned_data['material_type']
+            product_quantity = calculator_form.cleaned_data['product_quantity']
+            param1 = calculator_form.cleaned_data['param1']
+            param2 = calculator_form.cleaned_data['param2']
+
+            result = calculate_required_material(
+                product_type.id,
+                material_type.id,
+                product_quantity,
+                param1,
+                param2
+            )
+
+    return render(request, 'partners_list.html', {'partners': partners,
+                                                  'calculator_form': calculator_form,
+                                                   'result': result,})
 
 
 def partner_purchases(request, partner_id):

@@ -85,14 +85,14 @@
                                     {% endif %}
                                 {% endif %}
                             </div>
-                            <button type="submit" class="uk-button uk-button-primary uk-button-small" style="background-color: #67BA80;">
+                            <button type="submit" class="uk-button uk-button-small redact_button">
                                 Рассчитать
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
-
+            <!-- Список партнеров -->
             <div class="uk-grid-medium uk-child-width-1-1 uk-margin-top" uk-grid>
                 {% for partner in partners %}
                 <div>
@@ -115,7 +115,7 @@
                                         Рейтинг: {{ partner.rating }}/10
                                     </span>
                                 </div>
-                                <a href="{% url 'partner_edit' partner.id %}" class="uk-button uk-button-default uk-button-small uk-margin-top redact_button">
+                                <a href="{% url 'partner_edit' partner.id %}" class="uk-button uk-button-small uk-margin-top redact_button">
                                     Редактировать
                                 </a>
                             </div>
@@ -138,6 +138,7 @@
         </div>
     </main>
 
+    <!-- Подвал -->
     <footer class="header-footer-bg" style="padding: 30px 0; margin-top: 50px;">
         <div class="uk-container">
             <div class="uk-text-center">

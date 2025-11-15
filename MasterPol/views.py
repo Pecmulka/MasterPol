@@ -3,9 +3,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import MaterialCalculatorForm
 from .models import Partner, Partner_type, Region, City, Street, Partner_product, Address, Product_type, Material_type
 
-
 def partner_edit(request, partner_id):
     partner = Partner.objects.select_related('type', 'address__street__city__region').get(id=partner_id)
+
+    partner_types = Partner_type.objects.all()
 
     if request.method == 'POST':
         try:
@@ -18,12 +19,9 @@ def partner_edit(request, partner_id):
             partner.rating = request.POST.get('rating')
 
             # Обновление типа компании
-            type_name = request.POST.get('type')
-            if partner.type.name != type_name:
-                partner_type = Partner_type.objects.filter(name=type_name).first()
-                if not partner_type:
-                    partner_type = Partner_type.objects.create(name=type_name)
-                partner.type = partner_type
+            type_id = request.POST.get('type')
+            partner_type = Partner_type.objects.get(id=type_id)
+            partner.type = partner_type
 
             # Обновление адреса
             postal_code = request.POST.get('postal_code')
@@ -78,16 +76,16 @@ def partner_edit(request, partner_id):
             return redirect('partners_list')
 
         except Exception as e:
-            context = {
-                'partner': partner,
-                'error': str(e)
-            }
-            return render(request, 'partner_edit.html', context)
+            return render(request, 'partner_edit.html', {'partner': partner,
+                                                         'partner_types': partner_types,
+                                                         'error': str(e)})
 
-    return render(request, 'partner_edit.html', {'partner': partner})
+    return render(request, 'partner_edit.html', {'partner': partner, 'partner_types': partner_types,})
 
 
 def partner_add(request):
+    partner_types = Partner_type.objects.all()
+
     if request.method == 'POST':
         try:
             # Получение данных из формы
@@ -98,13 +96,11 @@ def partner_add(request):
             inn = request.POST.get('inn')
             rating = request.POST.get('rating')
 
-            # Поиск или создание типа компании
-            type_name = request.POST.get('type')
-            partner_type = Partner_type.objects.filter(name=type_name).first()
-            if not partner_type:
-                partner_type = Partner_type.objects.create(name=type_name)
+            # Тип компании
+            type_id = request.POST.get('type')
+            partner_type = Partner_type.objects.get(id=type_id)
 
-            # Поиск или создание адреса
+            # Создание адреса
             postal_code = request.POST.get('postal_code')
             house_number = request.POST.get('house_number')
             region_name = request.POST.get('region')
@@ -149,30 +145,24 @@ def partner_add(request):
                 phone=phone,
                 address=address,
                 INN=inn,
-                rating=rating,
+                rating=rating
             )
 
             return redirect('partners_list')
 
         except Exception as e:
-            return render(request, 'partner_add.html', {'error': str(e)})
+            return render(request, 'partner_add.html', {'partner_types': partner_types,
+                                                        'error': str(e)})
 
-    return render(request, 'partner_add.html')
+    return render(request, 'partner_add.html', {'partner_types': partner_types})
 
 
 def calculate_required_material(product_type_id, material_type_id, product_quantity, param1, param2):
-    """
-    Расчет количества материала для производства продукции
-    """
+
     try:
         # Проверяем существование типов продукции и материалов
         product_type = Product_type.objects.get(id=product_type_id)
         material_type = Material_type.objects.get(id=material_type_id)
-
-        # Проверяем валидность входных параметров
-        if (product_quantity <= 0 or param1 <= 0 or param2 <= 0 or
-                product_type.product_type_ratio <= 0 or material_type.material_scrap_percentage < 0):
-            return -1
 
         # Расчет материала на одну единицу продукции
         material_per_unit = param1 * param2 * product_type.product_type_ratio

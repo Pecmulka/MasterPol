@@ -67,5 +67,3 @@ class Material_type(models.Model):
 
     def __str__(self):
         return f"{self.type} (брак: {self.material_scrap_percentage}%)"
-
-

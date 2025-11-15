@@ -24,7 +24,7 @@
         <div class="uk-container">
             <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-medium-bottom">
                 <h2 class="uk-h2 accent-text">Редактирование партнера</h2>
-                <a href="{% url 'partners_list' %}" class="uk-button uk-button-default redact_button">Назад к списку</a>
+                <a href="{% url 'partners_list' %}" class="uk-button uk-button-primary" style="background-color: #67BA80;">Назад к списку</a>
             </div>
 
             <form method="post" class="uk-form-stacked">
@@ -43,36 +43,43 @@
                         <div class="uk-width-1-2@m">
                             <!-- Тип компании -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="type">Тип компании</label>
+                                <label class="uk-form-label accent-text" for="type">Тип компании *</label>
                                 <div class="uk-form-controls">
-                                    <input class="uk-input" type="text" id="type" name="type"
-                                           value="{{ partner.type.name }}" required>
-                                </div>
+                                    <select class="uk-select" id="type" name="type" required>
+                                    <option value="">Выберите тип компании</option>
+                                    {% for type in partner_types %}
+                                        <option value="{{ type.id }}" {% if partner.type.id == type.id %}selected{% endif %}>
+                                            {{ type.name }}
+                                        </option>
+                                    {% endfor %}
+                                    </select>
+                                 </div>
                             </div>
 
                             <!-- Наименование -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="name">Наименование</label>
+                                <label class="uk-form-label accent-text" for="name">Наименование *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="text" id="name" name="name"
-                                           value="{{ partner.name }}" required>
+                                           placeholder="Полное наименование компании" value="{{ partner.name }}" required>
                                 </div>
                             </div>
 
                             <!-- ФИО директора -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="ceo">ФИО директора</label>
+                                <label class="uk-form-label accent-text" for="ceo">ФИО директора *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="text" id="ceo" name="ceo"
-                                           value="{{ partner.CEO }}" required>
+                                           placeholder="Иванов Иван Иванович" value="{{ partner.CEO }}" required>
                                 </div>
                             </div>
 
                             <!-- ИНН -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="inn">ИНН</label>
+                                <label class="uk-form-label accent-text" for="inn">ИНН *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="text" id="inn" name="inn"
+                                           placeholder = "10 цифр"
                                            value="{{ partner.INN }}" required
                                            pattern="[0-9]{10}">
                                 </div>
@@ -80,18 +87,20 @@
 
                             <!-- Регион -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="region">Регион</label>
+                                <label class="uk-form-label accent-text" for="region">Регион *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="text" id="region" name="region"
+                                           placeholder = "Например: Московская область"
                                            value="{{ partner.address.street.city.region.name }}" required>
                                 </div>
                             </div>
 
                             <!-- Город -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="city">Город</label>
+                                <label class="uk-form-label accent-text" for="city">Город *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="text" id="city" name="city"
+                                           placeholder = "Например: Москва"
                                            value="{{ partner.address.street.city.name }}" required>
                                 </div>
                             </div>
@@ -101,52 +110,58 @@
                         <div class="uk-width-1-2@m">
                             <!-- Улица -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="street">Улица</label>
+                                <label class="uk-form-label accent-text" for="street">Улица *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="text" id="street" name="street"
+                                           placeholder = "Например: Ленина"
                                            value="{{ partner.address.street.name }}" required>
                                 </div>
                             </div>
 
                             <!-- Дом -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="house_number">Дом</label>
+                                <label class="uk-form-label accent-text" for="house_number">Дом *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="number" id="house_number" name="house_number"
+                                           placeholder="Номер дома"
                                            value="{{ partner.address.house_number }}" required>
                                 </div>
                             </div>
 
                             <!-- Почтовый индекс -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="postal_code">Почтовый индекс</label>
+                                <label class="uk-form-label accent-text" for="postal_code">Почтовый индекс *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="number" id="postal_code" name="postal_code"
-                                           value="{{ partner.address.postal_code }}" required>
+                                           placeholder="6 цифр"
+                                           value="{{ partner.address.postal_code }}" required
+                                           pattern="[0-9]{6}">
                                 </div>
                             </div>
 
                             <!-- Телефон -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="phone">Телефон</label>
+                                <label class="uk-form-label accent-text" for="phone">Телефон *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="tel" id="phone" name="phone"
+                                           placeholder="999 123 45 67"
                                            value="{{ partner.phone }}" required>
                                 </div>
                             </div>
 
                             <!-- Email -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="email">Email</label>
+                                <label class="uk-form-label accent-text" for="email">Email *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="email" id="email" name="email"
+                                           placeholder="example@mail.ru"
                                            value="{{ partner.email }}" required>
                                 </div>
                             </div>
 
                             <!-- Рейтинг -->
                             <div class="uk-margin">
-                                <label class="uk-form-label accent-text" for="rating">Рейтинг</label>
+                                <label class="uk-form-label accent-text" for="rating">Рейтинг *</label>
                                 <div class="uk-form-controls">
                                     <input class="uk-input" type="number" id="rating" name="rating"
                                            value="{{ partner.rating }}" min="1" max="10" required>
@@ -174,7 +189,6 @@
         </div>
     </footer>
 
-    <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.26/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.26/dist/js/uikit-icons.min.js"></script>
 </body>
